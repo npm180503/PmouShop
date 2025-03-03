@@ -12,7 +12,7 @@
 <body class="animsition">
     <div class="econmerce-content">
         <x-menu-component></x-menu-component>
-        <x-cart-component></x-cart-component>
+        
         @yield('content')
     </div>
     @include('frontend.footer')

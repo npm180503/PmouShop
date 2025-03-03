@@ -1,276 +1,209 @@
 @extends('frontend.layout')
 @section('content')
-<style>
-    .hidden {
-        opacity: 0;
-        max-height: 0;
-        overflow: hidden;
-        transition: opacity 0.5s ease, max-height 0.5s ease;
-    }
+    <style>
+        .how-active1 {
+            font-weight: bold;
+            color: red !important;
+            border-bottom: 2px solid red;
+        }
 
-    .visible {
-        margin-bottom: 50px;
-        opacity: 1;
-        max-height: 400px;
-        /* Đảm bảo chiều cao tối đa lớn hơn chiều cao sản phẩm */
-        transition: opacity 0.5s ease, max-height 0.5s ease;
-    }
+        .active-filter {
+            font-weight: bold;
+            color: red !important;
+        }
 
-    .product-price {
-        font-size: 18px;
-        margin-top: 10px;
-    }
 
-    .original-price {
-        text-decoration: line-through;
-        color: gray;
-        margin-right: 10px;
-    }
+        .hidden {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.5s ease, max-height 0.5s ease;
+        }
 
-    .sale-price {
-        color: red;
-        font-weight: bold;
-    }
+        .visible {
+            margin-bottom: 50px;
+            opacity: 1;
+            max-height: 400px;
+            /* Đảm bảo chiều cao tối đa lớn hơn chiều cao sản phẩm */
+            transition: opacity 0.5s ease, max-height 0.5s ease;
+        }
 
-    .current-price {
-        font-weight: bold;
-    }
-</style>
-	<!-- Product -->
-	<div class="bg0 m-t-23 p-b-140" style="margin-top:80px">
-		<div class="container">
-			<div class="flex-w flex-sb-m p-b-52">
-				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-						Tất cả
-					</button>
+        .product-price {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: gray;
+            margin-right: 10px;
+        }
+
+        .sale-price {
+            color: red;
+            font-weight: bold;
+        }
+
+        .current-price {
+            font-weight: bold;
+        }
+    </style>
+    <!-- Product -->
+    <div class="bg0 m-t-23 p-b-140" style="margin-top:80px">
+        <div class="container">
+            <div class="flex-w flex-sb-m p-b-52">
+                <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1 filter-btn" data-filter="all">
+                        Tất cả
+                    </button>
 
                     @foreach ($menus as $menu)
-					    <button href="{{ route('fr.product', ['menu_id' => $menu->id]) }}" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
-						    {{ $menu->name }}
-					    </button>                        
+                        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 filter-btn"
+                            data-filter="{{ $menu->id }}">
+                            {{ $menu->name }}
+                        </button>
                     @endforeach
-                    
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".women">
+
+                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 filter-btn" data-filter="sale">
                         Giảm giá
-                    </button>  
+                    </button>
+                </div>
 
-				</div>
 
-				<div class="flex-w flex-c-m m-tb-10">
-					<div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
-						<i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
-						<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-						 Filter
-					</div>
+                <div class="flex-w flex-c-m m-tb-10">
+                    <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
+                        <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
+                        <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+                        Filter
+                    </div>
 
-					<div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
-						<i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
-						<i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-						Search
-					</div>
-				</div>
-				
-				<!-- Search product -->
-				<div class="dis-none panel-search w-full p-t-10 p-b-15">
-					<div class="bor8 dis-flex p-l-15">
-						<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-							<i class="zmdi zmdi-search"></i>
-						</button>
+                    <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+                        <i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
+                        <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+                        Search
+                    </div>
+                </div>
 
-						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
-					</div>	
-				</div>
+                <!-- Search product -->
+                <div class="dis-none panel-search w-full p-t-10 p-b-15">
+                    <div class="bor8 dis-flex p-l-15">
+                        <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+                            <i class="zmdi zmdi-search"></i>
+                        </button>
 
-				<!-- Filter -->
-				<div class="dis-none panel-filter w-full p-t-10">
-					<div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
-						<div class="filter-col1 p-r-15 p-b-27">
-							<div class="mtext-102 cl2 p-b-15">
-								Sort By
-							</div>
+                        <input class="mtext-107 cl2 size-114 plh2 p-r-15" id="search-input" type="text"
+                            name="search-product" placeholder="Search">
+                    </div>
+                </div>
 
-							<ul>
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Default
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Popularity
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Average rating
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-										Newness
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Price: Low to High
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										Price: High to Low
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						<div class="filter-col2 p-r-15 p-b-27">
-							<div class="mtext-102 cl2 p-b-15">
-								Price
-							</div>
-
-							<ul>
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-										All
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$0.00 - $50.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$50.00 - $100.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$100.00 - $150.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$150.00 - $200.00
-									</a>
-								</li>
-
-								<li class="p-b-6">
-									<a href="#" class="filter-link stext-106 trans-04">
-										$200.00+
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-            <div class="row" id="product-list">
-                @foreach ($products as $index => $product)
-                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 product-item {{ $index < 8 ? 'initial' : 'hidden' }} menu-{{ $product->menu_id }}">
-                        <div class="block2">
-                            <div class="block2-pic hov-img0">
-                                <img src="{{ asset($product->thumb) }}" alt="IMG-PRODUCT"
-                                    style="width: 100%; height: 400px; object-fit: cover;">
-                                <a href="/san-pham/{{ $product->id }}-{{ Str::slug($product->name, '-')}}"
-									data-id="{{ $product->id }}"
-                                    class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                                    Xem ngay
-                                </a>
+                <!-- Filter -->
+                <div class="dis-none panel-filter w-full p-t-10">
+                    <div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
+                        <div class="filter-col1 p-r-15 p-b-27">
+                            <div class="mtext-102 cl2 p-b-15">
+                                Sắp xếp
                             </div>
-                            <div class="block2-txt flex-w flex-t p-t-14">
-                                <div class="block2-txt-child1 flex-col-l">
-									<a href="{{ route('fr.product.detail', ['productID' => $product->id]) }} "
-										class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-										{{ $product->name }}
-									</a>
-                                    @if ($product->price_sale)
-                                        <span class="original-price"
-                                            style="text-decoration: line-through;">{{ number_format($product->price, 0) }}
-                                            VND</span>
-                                        <span class="sale-price"
-                                            style="color: red;">{{ number_format($product->price_sale, 0) }} VND</span>
-                                    @else
-                                        <span class="current-price">{{ number_format($product->price, 0) }} VND</span>
-                                    @endif
-                                </div>
+
+                            <ul>
+                                <li class="p-b-6">
+                                    <a href="#" class="filter-link stext-106 trans-04" data-sort="default">
+                                        Mặc định
+                                    </a>
+                                </li>
+
+                                <li class="p-b-6">
+                                    <a href="#" class="filter-link stext-106 trans-04" data-sort="newest">
+                                        Mới nhất
+                                    </a>
+                                </li>
+
+                                <li class="p-b-6">
+                                    <a href="#" class="filter-link stext-106 trans-04" data-sort="price-low">
+                                        Giá: Thấp đến cao
+                                    </a>
+                                </li>
+
+                                <li class="p-b-6">
+                                    <a href="#" class="filter-link stext-106 trans-04" data-sort="price-high">
+                                        Giá: Cao đến thấp
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div class="filter-col2 p-r-15 p-b-27">
+                            <div class="mtext-102 cl2 p-b-15">
+                                Giá
                             </div>
+
+                            <ul>
+                                <li class="p-b-6">
+                                    <a href="#" class="filter-link stext-106 trans-04" data-price="all">
+                                        Tất cả
+                                    </a>
+                                </li>
+
+                                <li class="p-b-6">
+                                    <a href="#" class="filter-link stext-106 trans-04" data-price="1-10">
+                                        1 VND - 10 VND
+                                    </a>
+                                </li>
+
+                                <li class="p-b-6">
+                                    <a href="#" class="filter-link stext-106 trans-04" data-price="11-50">
+                                        11 VND - 50 VND
+                                    </a>
+                                </li>
+
+                                <li class="p-b-6">
+                                    <a href="#" class="filter-link stext-106 trans-04" data-price="51-100">
+                                        51 VND - 100 VND
+                                    </a>
+                                </li>
+
+                                <li class="p-b-6">
+                                    <a href="#" class="filter-link stext-106 trans-04" data-price="100+">
+                                        100 VND ++
+                                    </a>
+                                </li>
+
+                            </ul>
                         </div>
                     </div>
-                @endforeach
+                </div>
             </div>
-            <div class="flex-c-m flex-w w-full p-t-45">
-                <a id="toggle-button" href="#"
-                    class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-                    Xem Thêm
-                </a>
-            </div>
-		</div>
-	</div>
-		
 
-	<!-- Back to top -->
-	<div class="btn-back-to-top" id="myBtn">
-		<span class="symbol-btn-back-to-top">
-			<i class="zmdi zmdi-chevron-up"></i>
-		</span>
-	</div>
-	<script src={{ asset("template/js/product.js?v=".time()) }}></script>	
-    <script>
+            <div id="product-list">
+                @include('frontend.product.list', ['products' => $products])
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Back to top -->
+    <div class="btn-back-to-top" id="myBtn">
+        <span class="symbol-btn-back-to-top">
+            <i class="zmdi zmdi-chevron-up"></i>
+        </span>
+    </div>
+    <script src="{{ asset('template/js/main.js') }}?v={{ time() }}"></script>
+
+    <script src={{ asset('template/js/product.js?v=' . time()) }}></script>
+
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const toggleButton = document.getElementById('toggle-button');
-            const hiddenItems = document.querySelectorAll('.product-item.hidden');
-            const initialItems = document.querySelectorAll('.product-item.initial');
-    
-            let isExpanded = false;
-    
-            toggleButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (isExpanded) {
-                    // Thu gọn
-                    hiddenItems.forEach(item => {
-                        item.classList.remove('visible');
-                        item.classList.add('hidden');
-                    });
-                    toggleButton.textContent = 'Xem Thêm';
-                    isExpanded = false;
-                } else {
-                    // Hiển thị thêm
-                    hiddenItems.forEach(item => {
-                        item.classList.remove('hidden');
-                        item.classList.add('visible');
-                    });
-                    toggleButton.textContent = 'Thu Gọn';
-                    isExpanded = true;
-                }
-            });
-        });
+            const searchInput = document.querySelector('input[name="search-product"]');
+            const products = document.querySelectorAll('.product-item');
 
-        document.addEventListener('DOMContentLoaded', function () {
-        const filterButtons = document.querySelectorAll('.filter-tope-group button');
-        const products = document.querySelectorAll('.product-item');
+            searchInput.addEventListener('keyup', function() {
+                let searchText = searchInput.value.toLowerCase().trim();
 
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                let filterValue = this.getAttribute('data-filter');
-
-                // Loại bỏ lớp active khỏi tất cả các nút và thêm vào nút đang chọn
-                filterButtons.forEach(btn => btn.classList.remove('how-active1'));
-                this.classList.add('how-active1');
-
-                // Hiển thị hoặc ẩn sản phẩm dựa trên filter
                 products.forEach(product => {
-                    if (filterValue === '*' || product.classList.contains(filterValue.substring(1))) {
+                    let productName = product.querySelector('.js-name-b2').textContent
+                        .toLowerCase();
+
+                    if (productName.includes(searchText)) {
                         product.style.display = 'block';
                     } else {
                         product.style.display = 'none';
@@ -278,6 +211,162 @@
                 });
             });
         });
-    });
+    </script> --}}
+
+    {{-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const productList = document.querySelector("#product-list");
+            const productItems = document.querySelectorAll(".product-item");
+
+            // Xử lý sự kiện click cho lọc giá
+            document.querySelectorAll("[data-price]").forEach((btn) => {
+                btn.addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    // Loại bỏ lớp active khỏi tất cả các nút lọc giá
+                    document.querySelectorAll("[data-price]").forEach((el) => el.classList.remove(
+                        "active-filter"));
+
+                    // Thêm lớp active cho nút được chọn
+                    this.classList.add("active-filter");
+
+                    let priceRange = this.getAttribute("data-price").split("-");
+                    let minPrice = priceRange[0] ? parseInt(priceRange[0]) : 0;
+                    let maxPrice = priceRange[1] ? parseInt(priceRange[1]) : Infinity;
+
+                    productItems.forEach((item) => {
+                        let productPrice = parseInt(item.getAttribute("data-price"));
+                        if (priceRange == "all" || (productPrice >= minPrice &&
+                                productPrice <= maxPrice)) {
+                            item.style.display = "block";
+                        } else {
+                            item.style.display = "none";
+                        }
+                    });
+                });
+            });
+
+            // Xử lý sự kiện click cho sắp xếp
+            document.querySelectorAll("[data-sort]").forEach((btn) => {
+                btn.addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    // Loại bỏ lớp active khỏi tất cả các nút sắp xếp
+                    document.querySelectorAll("[data-sort]").forEach((el) => el.classList.remove(
+                        "active-filter"));
+
+                    // Thêm lớp active cho nút được chọn
+                    this.classList.add("active-filter");
+
+                    let sortType = this.getAttribute("data-sort");
+                    let sortedItems = Array.from(productItems);
+
+                    if (sortType === "newest") {
+                        sortedItems.sort((a, b) => {
+                            return new Date(b.getAttribute("data-date")) - new Date(a
+                                .getAttribute("data-date"));
+                        });
+                    } else if (sortType === "price-low") {
+                        sortedItems.sort((a, b) => {
+                            return parseInt(a.getAttribute("data-price")) - parseInt(b
+                                .getAttribute("data-price"));
+                        });
+                    } else if (sortType === "price-high") {
+                        sortedItems.sort((a, b) => {
+                            return parseInt(b.getAttribute("data-price")) - parseInt(a
+                                .getAttribute("data-price"));
+                        });
+                    }
+
+                    // Cập nhật lại danh sách sản phẩm
+                    productList.innerHTML = "";
+                    sortedItems.forEach((item) => {
+                        productList.appendChild(item);
+                    });
+                });
+            });
+        });
+    </script> --}}
+
+
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const filterButtons = document.querySelectorAll(".filter-tope-group button");
+            const searchInput = document.querySelector("#search-input");
+            const sortFilters = document.querySelectorAll("[data-sort]");
+            const priceFilters = document.querySelectorAll("[data-price]"); 
+
+            function fetchProducts() {
+                let menuId = document.querySelector(".filter-tope-group .how-active1")?.getAttribute(
+                    "data-filter") || "all";
+                let filter = document.querySelector(".filter-active")?.getAttribute("data-sort") || "";
+                let priceRange = document.querySelector(".price-active")?.getAttribute("data-price") ||
+                "all"; // Lấy giá trị lọc theo giá
+                let search = searchInput.value.trim();
+
+                $.ajax({
+                    url: '{{ route('fr.product.filter') }}',
+                    method: 'GET',
+                    data: {
+                        menu_id: menuId,
+                        filter: filter,
+                        price_range: priceRange,
+                        search: search
+                    }, // Gửi thêm price_range
+                    success: function(response) {
+                        $('#product-list').html(response.html);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+
+            // Click vào danh mục
+            filterButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    filterButtons.forEach(btn => btn.classList.remove("how-active1"));
+                    this.classList.add("how-active1");
+                    fetchProducts();
+                });
+            });
+
+            // Click vào filter (sắp xếp)
+            sortFilters.forEach(button => {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll("[data-sort]").forEach((el) => el.classList.remove(
+                        "active-filter"));
+
+                    // Thêm lớp active cho nút được chọn
+                    this.classList.add("active-filter");
+                    sortFilters.forEach(btn => btn.classList.remove("filter-active"));
+                    this.classList.add("filter-active");
+                    fetchProducts();
+                });
+            });
+
+            // Click vào filter giá
+            priceFilters.forEach(button => {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    // Loại bỏ lớp active khỏi tất cả các nút lọc giá
+                    document.querySelectorAll("[data-price]").forEach((el) => el.classList.remove(
+                        "active-filter"));
+
+                    // Thêm lớp active cho nút được chọn
+                    this.classList.add("active-filter");
+                    priceFilters.forEach(btn => btn.classList.remove("price-active"));
+                    this.classList.add("price-active");
+                    fetchProducts();
+                });
+            });
+
+            // Nhập tìm kiếm
+            searchInput.addEventListener("keyup", function() {
+                fetchProducts();
+            });
+        });
     </script>
 @endsection

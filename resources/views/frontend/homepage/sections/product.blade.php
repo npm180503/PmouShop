@@ -81,14 +81,6 @@
                 </div>
             @endforeach
         </div>
-        <div class="flex-c-m flex-w w-full p-t-45">
-            <a id="toggle-button" href="#"
-                class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-                Xem Thêm
-            </a>
-        </div>
-
-
     </div>
 </section>
 <script src={{ asset("template/vendor/slick.min.js") }}></script>
@@ -118,65 +110,4 @@
     });
 </script>
 
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const toggleButton = document.getElementById('toggle-button');
-        const hiddenItems = document.querySelectorAll('.product-item.hidden');
-        const initialItems = document.querySelectorAll('.product-item.initial');
-
-        let isExpanded = false;
-
-        toggleButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (isExpanded) {
-                // Thu gọn
-                hiddenItems.forEach(item => {
-                    item.classList.remove('visible');
-                    item.classList.add('hidden');
-                });
-                toggleButton.textContent = 'Xem Thêm';
-                isExpanded = false;
-            } else {
-                // Hiển thị thêm
-                hiddenItems.forEach(item => {
-                    item.classList.remove('hidden');
-                    item.classList.add('visible');
-                });
-                toggleButton.textContent = 'Thu Gọn';
-                isExpanded = true;
-            }
-        });
-    });
-</script>
-
-<script>
-        // buildSlick = function(){
-        //     $('.wrap-slick3').each(function() {
-        //         $(this).find('.slick3').slick({
-        //             slidesToShow: 1,
-        //             slidesToScroll: 1,
-        //             fade: true,
-        //             infinite: true,
-        //             autoplay: false,
-        //             autoplaySpeed: 6000,
-
-        //             arrows: true,
-        //             appendArrows: $(this).find('.wrap-slick3-arrows'),
-        //             prevArrow: '<button class="arrow-slick3 prev-slick3"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
-        //             nextArrow: '<button class="arrow-slick3 next-slick3"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
-
-        //             dots: true,
-        //             appendDots: $(this).find('.wrap-slick3-dots'),
-        //             dotsClass: 'slick3-dots',
-        //             customPaging: function(slick, index) {
-        //                 var portrait = $(slick.$slides[index]).data('thumb');
-        //                 return '<img src=" ' + portrait +
-        //                     ' "/><div class="slick3-dot-overlay"></div>';
-        //             },
-        //         });
-        //     });
-        // }
-    // });
-</script>
 

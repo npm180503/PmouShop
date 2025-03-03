@@ -184,14 +184,14 @@
         }    
     });
 
-    $('.js-show-search').on('click',function(){
+    $(document).on("click", ".js-show-search", function() {
         $(this).toggleClass('show-search');
         $('.panel-search').slideToggle(400);
 
         if($('.js-show-filter').hasClass('show-filter')) {
             $('.js-show-filter').removeClass('show-filter');
             $('.panel-filter').slideUp(400);
-        }    
+        }  
     });
 
 
@@ -199,11 +199,11 @@
 
     /*==================================================================
     [ Cart ]*/
-    $('.js-show-cart').on('click',function(){
+    $(document).on('click', '.js-show-cart', function(){
         $('.js-panel-cart').addClass('show-header-cart');
     });
 
-    $('.js-hide-cart').on('click',function(){
+    $(document).on("click", ".js-hide-cart", function(){
         $('.js-panel-cart').removeClass('show-header-cart');
     });
 

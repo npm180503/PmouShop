@@ -1,6 +1,7 @@
 jQuery(document).ready(function(){
     $("body").append("<div id='modal-popup'></div>");
     $(".js-show-modal1").click(function(){
+        $("#modal-popup").empty();
         let productId = $(this).data("id");
         $.ajax({
             url: `/product/show-modal-detail/${productId}`,
@@ -36,9 +37,10 @@ jQuery(document).ready(function(){
 
 $(document).on("click", ".js-addcart-detail", function(){
     let productId = $(this).data("id");
-    let sizeId = $(".size-button").data("size-id");
-    let sizeName = $("#selected-size-name").data("size");
-    let quantity = $(".num-product").val();
+    let sizeId = $(".size-button.active").data("size-id");
+    let sizeName = $(".size-button.active").data("size");
+    let quantity = $(".show-modal #quantity-product").val();
+    console.log(quantity);
 
     if (!sizeId) {
         Swal.fire({
@@ -64,33 +66,16 @@ $(document).on("click", ".js-addcart-detail", function(){
                 text: "Sản phẩm đã được thêm vào giỏ hàng.",
                 icon: "success"
             });
-
-            $(".icon-header-noti").attr("data-notify", response.total_items);
+            // console.log(response);
+            $(".cart-content").html(response.cart_content);
+            // $(".icon-header-noti").attr("data-notify", response.total_items);
         },
         error: function(){
-            if (xhr.status === 401) { // Lỗi 401: Chưa đăng nhập
-                Swal.fire({
-                    title: "Lỗi!",
-                    text: "Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Đăng nhập",
-                    cancelButtonText: "Hủy"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "/login"; // Chuyển hướng đến trang đăng nhập
-                    }
-                });
-            } else {
-                Swal.fire({
-                    title: "Lỗi!",
-                    text: "Có lỗi xảy ra, vui lòng thử lại.",
-                    icon: "error"
-                });
-            }
+
         }
     });
 });
+
 jQuery(document).ready(function() {
     // Bấm chọn size
     $(".size-button").click(function() {
@@ -109,5 +94,64 @@ jQuery(document).ready(function() {
     // Thêm vào giỏ hàng
     
 });
+
+$(document).ready(function() {
+    // Xử lý xóa sản phẩm khỏi giỏ hàng
+    $(document).on("click", ".btn-remove-cart", function() {
+        let button = $(this);
+        let rowId = button.data("rowid");
+        let productId = button.data("id"); 
+        let url = button.data("url").replace(':id', productId);
+
+        // Hiển thị hộp thoại xác nhận
+        Swal.fire({
+            title: "Bạn có chắc chắn?",
+            text: "Sản phẩm này sẽ bị xóa khỏi giỏ hàng!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Có, xóa ngay!",
+            cancelButtonText: "Hủy"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu người dùng đồng ý xóa
+                $.ajax({
+                    url: "/cart/remove",
+                    type: "POST",
+                    data: {
+                        rowId: rowId,
+                        _method: "DELETE",
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $(".cart-content").html(response.cart_content);
+                            Swal.fire({
+                                title: "Đã xóa!",
+                                text: "Sản phẩm đã được xóa khỏi giỏ hàng.",
+                                icon: "success"
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Lỗi!",
+                                text: "Không thể xóa sản phẩm.",
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: "Lỗi!",
+                            text: "Có lỗi xảy ra, vui lòng thử lại.",
+                            icon: "error"
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
+
+
 
 

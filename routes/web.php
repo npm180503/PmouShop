@@ -20,6 +20,8 @@ use App\Http\Controllers\FrontEnd\MenuController;
 use App\Http\Controllers\FrontEnd\PayController;
 use App\Http\Controllers\FrontEnd\ProductController;
 use App\Http\Controllers\FrontEnd\ReviewController;
+use App\Http\Controllers\Admin\OrderAdminController;
+use App\Http\Controllers\FrontEnd\OrderController;
 
 //admin
 Route::get('admin/users/login', [LoginAdminController::class, 'index'])->name('login');
@@ -87,6 +89,23 @@ Route::middleware(['auth'])->group(function(){
             Route::post('mark-as-replied/{id}', [ReviewAdminController::class, 'markAsReplied'])->name("admin.review.markAsReplied");
             Route::delete('destroy', [ReviewAdminController::class, 'destroy'])->name("admin.review.destroy");
         });
+
+        Route::prefix('orders')->group(function(){
+            Route::get('pending', [OrderAdminController::class, 'pending'])->name("admin.order.pending");
+
+            Route::get('processing', [OrderAdminController::class, 'processing'])->name("admin.order.processing");
+            Route::post('mark-as-processing/{id}', [OrderAdminController::class, 'markAsProcessing'])->name("admin.order.markAsProcessing");
+
+            Route::get('shipped', [OrderAdminController::class, 'shipped'])->name("admin.order.shipped");
+            Route::post('mark-as-shipped/{id}', [OrderAdminController::class, 'markAsShipped'])->name("admin.order.markAsShipped");
+
+            Route::get('completed', [OrderAdminController::class, 'completed'])->name("admin.order.completed");
+            Route::post('mark-as-completed/{id}', [OrderAdminController::class, 'markAsCompleted'])->name("admin.order.markAsCompleted");
+
+            Route::get('canceled', [OrderAdminController::class, 'canceled'])->name("admin.order.canceled");
+            Route::post('mark-as-canceled/{id}', [OrderAdminController::class, 'markAsCanceled'])->name("admin.order.markAsCanceled");
+
+        });
         
     });
 
@@ -100,6 +119,7 @@ Route::prefix("product")->group(function(){
     Route::get("", [ProductController::class, "index"])->name("fr.product");
     Route::get("/show-modal-detail/{id}", [ProductController::class, "showDetailInPopup"])->name("fr.product.show_modal_detail");
     Route::get("detail/{productID}", [ProductController::class, "detail"])->name("fr.product.detail");
+    Route::get('/product/filter', [ProductController::class, 'filter'])->name('fr.product.filter');
 });
 
 
@@ -120,7 +140,11 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('fr.logout');
 
 Route::middleware(['auth:frontend'])->group(function () {
     Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-    Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
+    Route::post('/cart/update', [CartController::class, 'updateCartItem'])->name('cart.update');
     Route::delete('/cart/remove', [CartController::class, 'removeCart'])->name('cart.remove');
+    Route::prefix('/cart')->group(function(){
+        Route::get("", [CartController::class, "viewCart"])->name("cart.view");
+        Route::post("/order", [OrderController::class, "store"])->name("fr.order");
+    });
     Route::post('/review', [ReviewController::class, 'send'])->name('fr.review.send');
 });

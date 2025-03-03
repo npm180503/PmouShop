@@ -17,5 +17,4 @@ class Menu extends Model
         'content',
         'active'
     ];
-    
 }

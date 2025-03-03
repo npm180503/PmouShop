@@ -15,10 +15,10 @@
     }
 
     .size-button.active {
-    background-color: black !important;
-    color: white !important;
-    border-color: black !important;
-}
+        background-color: black !important;
+        color: white !important;
+        border-color: black !important;
+    }
 
 
 
@@ -52,8 +52,9 @@
         object-fit: cover;
         max-height: 400px;
     }
-
 </style>
+
+
 <div class="wrap-modal1 js-modal1 p-t-60 p-b-20">
     <div class="overlay-modal1 js-hide-modal1"></div>
     <div class="container">
@@ -90,8 +91,16 @@
                         </h4>
 
                         <span class="mtext-106 cl2 js-price-detail">
-                            <span class="original-price" style="text-decoration: line-through; color: gray;">{{ number_format($product->price) }} VND</span>
-                            <span class="sale-price" style="color: red; font-weight: bold;">{{ number_format($product->price_sale) }} VND</span>
+                            @if ($product->price_sale)
+                                <span class="original-price"
+                                    style="text-decoration: line-through; color: gray;">{{ number_format($product->price) }}
+                                    VND</span>
+                                <span class="sale-price"
+                                    style="color: red; font-weight: bold;">{{ number_format($product->price_sale) }}
+                                    VND</span>
+                            @else
+                                <span class="current-price">{{ number_format($product->price, 0) }} VND</span>
+                            @endif
                         </span>
 
                         <p class="stext-102 cl3 p-t-23 js-description-detail">
@@ -107,8 +116,7 @@
                                         @foreach ($sizes as $size)
                                             <button type="button"
                                                 class="size-button {{ in_array($size->id, $availableSizes) ? '' : 'disabled' }}"
-                                                data-size="{{ $size->name }}"
-                                                data-size-id="{{ $size->id }}"
+                                                data-size="{{ $size->name }}" data-size-id="{{ $size->id }}"
                                                 {{ in_array($size->id, $availableSizes) ? '' : 'disabled' }}>
                                                 {{ $size->name }}
                                             </button>
@@ -127,16 +135,17 @@
                                             <i class="fs-16 zmdi zmdi-minus"></i>
                                         </div>
 
-                                        <input class="mtext-104 cl3 txt-center num-product" type="number"
-                                            name="num-product" value="1">
+                                        <input class="mtext-104 cl3 txt-center num-product" id="quantity-product"
+                                            type="number" name="num-product" value="1">
 
                                         <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                             <i class="fs-16 zmdi zmdi-plus"></i>
                                         </div>
                                     </div>
 
-                                    <button 
-                                        class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" data-id="{{ $product->id }}">
+                                    <button
+                                        class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"
+                                        data-id="{{ $product->id }}">
                                         Thêm vào giỏ hàng
                                     </button>
                                 </div>
@@ -148,15 +157,42 @@
         </div>
     </div>
 </div>
+
+
 <script>
-var sizeButtons = document.querySelectorAll(".size-button:not(.disabled)");
-sizeButtons.forEach(button => {
-    button.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành động mặc định (nếu có)
-        // Loại bỏ class active khỏi tất cả nút size
-        sizeButtons.forEach(btn => btn.classList.remove("active"));
-        // Thêm class active cho nút được click
-        this.classList.add("active");
+    var sizeButtons = document.querySelectorAll(".size-button:not(.disabled)");
+    sizeButtons.forEach(button => {
+        button.addEventListener("click", function(event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định (nếu có)
+            // Loại bỏ class active khỏi tất cả nút size
+            sizeButtons.forEach(btn => btn.classList.remove("active"));
+            // Thêm class active cho nút được click
+            this.classList.add("active");
+        });
     });
-});
 </script>
+
+<script>
+    // Truyền giá trị `auth()->check()` vào biến JavaScript
+    $(document).on("click", ".js-addcart-detail", function() {
+        var isAuthenticated =
+            {{ auth('frontend')->check() ? 'true' : 'false' }}; // Kiểm tra trạng thái đăng nhập
+
+        if (!isAuthenticated) {
+            // Nếu chưa đăng nhập, hiển thị thông báo lỗi bằng SweetAlert
+            Swal.fire({
+                icon: 'warning',
+                title: 'Bạn chưa đăng nhập',
+                text: 'Vui lòng đăng nhập để thêm vào giỏ hàng.',
+                confirmButtonText: 'Đăng nhập',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Điều hướng đến trang đăng nhập nếu người dùng nhấn nút "Đăng nhập"
+                    window.location.href = "{{ route('fr.login') }}";
+                }
+            });
+            return;
+        }
+    });
+</script>
+{{-- <script src="{{ asset('js/product.js') }}"></script> <!-- hoặc đường dẫn đến file JS của bạn --> --}}

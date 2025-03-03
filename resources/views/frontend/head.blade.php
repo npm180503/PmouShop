@@ -3,7 +3,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@400;700&display=swap&subset=vietnamese" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap&subset=vietnamese" rel="stylesheet">
+
 <!--===============================================================================================-->	
 <link rel="icon" type="image/png" href="/template/admin/dist/img/download.jpg"/>
 <!--===============================================================================================-->
@@ -32,7 +33,7 @@
 <link rel="stylesheet" type="text/css" href="/template/vendor/perfect-scrollbar/perfect-scrollbar.css">
 <!--===============================================================================================-->
 <link rel="stylesheet" type="text/css" href="/template/css/util.css">
-<link rel="stylesheet" type="text/css" href="/template/css/main.css">
+<link rel="stylesheet" type="text/css" href="/template/css/main.css?v={{ time() }}">
 <!--===============================================================================================-->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
